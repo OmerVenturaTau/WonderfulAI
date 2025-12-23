@@ -68,3 +68,78 @@ This setup uses separate containers for:
 - **Backend API** (port 8000)
 - **Frontend Nginx** (port 8080)
 
+
+
+## Database Overview
+The application uses **PostgreSQL 15** as its database. Below is the schemes and information regarding the data i inserted (which can be found under the ```backend/db```)
+
+### Database Schema
+
+The database contains the following tables:
+
+- **`users`** - Customer information
+  - `user_id` (TEXT, PRIMARY KEY)
+  - `full_name` (TEXT)
+  - `phone` (TEXT)
+  - `email` (TEXT)
+  - `preferred_language` (TEXT)
+
+- **`medications`** - Medication catalog
+  - `med_id` (TEXT, PRIMARY KEY)
+  - `brand_name` (TEXT)
+  - `generic_name` (TEXT)
+  - `active_ingredients` (TEXT)
+  - `form` (TEXT)
+  - `strength` (TEXT)
+  - `rx_required` (INTEGER) - 1 for prescription, 0 for OTC
+  - `standard_directions` (TEXT)
+  - `warnings` (TEXT)
+  - `contraindications` (TEXT)
+
+- **`stores`** - Pharmacy store locations
+  - `store_id` (TEXT, PRIMARY KEY)
+  - `city` (TEXT)
+  - `name` (TEXT)
+
+- **`inventory`** - Stock levels per store
+  - `store_id` (TEXT)
+  - `med_id` (TEXT)
+  - `quantity` (INTEGER)
+  - `last_updated` (TEXT)
+  - PRIMARY KEY (`store_id`, `med_id`)
+
+- **`prescriptions`** - User prescriptions
+  - `prescription_id` (TEXT, PRIMARY KEY)
+  - `user_id` (TEXT)
+  - `med_id` (TEXT)
+  - `directions` (TEXT)
+  - `refills_remaining` (INTEGER)
+  - `expires_at` (TEXT)
+
+- **`refill_requests`** - Prescription refill requests
+  - `refill_request_id` (TEXT, PRIMARY KEY)
+  - `prescription_id` (TEXT)
+  - `user_id` (TEXT)
+  - `status` (TEXT)
+  - `created_at` (TEXT)
+
+- **`tool_stats`** - Tool usage statistics
+  - `tool_name` (TEXT, PRIMARY KEY)
+  - `call_count` (BIGINT)
+
+
+The database is initialized with seed data including:
+- 10 sample users (IDs: 1001-1010)
+- 5 pharmacy stores across different cities (Tel Aviv, Jerusalem, Haifa, Beer Sheva)
+- 15 medications (mix of OTC and prescription drugs)
+- Inventory data across all stores
+- Sample prescriptions and refill requests
+
+
+More on the workflows and questions the agent can answer can be found in the ```Evidence\EVALUATION_PLAN.md```.
+
+
+If anything else is needed, please feel free to ask.
+
+Omer
+
